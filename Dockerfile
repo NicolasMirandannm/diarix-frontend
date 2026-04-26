@@ -1,15 +1,17 @@
+# build
 FROM node:20-alpine AS builder
 
 WORKDIR /app
-
 COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+RUN cp .env.production .env && npm run build
 
-FROM alpine:3.19
+# runtime com nginx
+FROM nginx:alpine
 
-WORKDIR /app
+COPY --from=builder /app/dist /usr/share/nginx/html
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=builder /app/dist /app/dist
+EXPOSE 80

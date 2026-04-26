@@ -1,12 +1,15 @@
-# Dockerfile
-FROM node:lts-alpine AS build
+FROM node:20-alpine AS builder
+
 WORKDIR /app
+
 COPY package*.json ./
 RUN npm install
+
 COPY . .
 RUN npm run build
 
-FROM nginx:alpine
-COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+FROM alpine:3.19
+
+WORKDIR /app
+
+COPY --from=builder /app/dist /app/dist

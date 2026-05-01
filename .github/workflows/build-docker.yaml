@@ -28,6 +28,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: nicksolutions/diarixpro-frontend:lastest
+          tags: nicksolutions/diarixpro-frontend:latest
           file: ./Dockerfile
           no-cache: true
